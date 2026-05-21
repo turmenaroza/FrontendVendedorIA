@@ -5,7 +5,7 @@
  */
 
 export const CONFIG = {
-    API_BASE_URL: 'https://vendedor-ia-backend.ixbtpi.easypanel.host:8000',
+    API_BASE_URL: 'https://vendedor-ia-backend.ixbtpi.easypanel.host',
 
     ENDPOINTS: {
         PROMPT_LOAD: '/api/prompt/load',
