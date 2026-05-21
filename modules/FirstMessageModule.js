@@ -43,7 +43,7 @@ export const FirstMessageModule = {
         if (!time) { timeHint.textContent = ''; return; }
 
         if (TIME_RE.test(time)) {
-            timeHint.textContent = `Próximo disparo agendado para as ${time} (horário do servidor).`;
+            timeHint.textContent = `Próximo disparo agendado para as ${time} (horário de Brasília).`;
             timeHint.style.color = 'var(--text-dim)';
         } else {
             timeHint.textContent = 'Formato inválido — use HH:MM:SS (ex: 09:00:00).';
