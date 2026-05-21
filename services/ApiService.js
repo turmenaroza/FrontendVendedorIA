@@ -6,13 +6,18 @@ import { CONFIG } from '../config.js';
 import { SessionManager } from './SessionManager.js';
 
 export class ApiService {
+
     static async request(endpoint, payload = null, method = 'POST') {
+
         const headers = {
             'Content-Type': 'application/json',
             'access-token': SessionManager.getToken(),
         };
 
-        const options = { method, headers };
+        const options = {
+            method,
+            headers,
+        };
 
         if (payload !== null && method !== 'GET') {
             options.body = JSON.stringify(payload);
@@ -29,10 +34,20 @@ export class ApiService {
             );
         }
 
+        // tenta ler resposta
         const text = await response.text();
 
-        return text
-            ? JSON.parse(text)
-            : null;
+        // resposta vazia
+        if (!text || text.trim() === '') {
+            return null;
+        }
+
+        // tenta converter JSON
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.warn('[ApiService] Resposta não é JSON:', text);
+            return text;
+        }
     }
 }
