@@ -2,14 +2,11 @@
  * services/ApiService.js
  * Camada HTTP única. Todos os módulos importam daqui.
  */
-
 import { CONFIG } from '../config.js';
 import { SessionManager } from './SessionManager.js';
 
 export class ApiService {
-
     static async request(endpoint, payload = null, method = 'POST') {
-
         const headers = {
             'Content-Type': 'application/json',
             'access-token': SessionManager.getToken(),
@@ -32,18 +29,10 @@ export class ApiService {
             );
         }
 
-        // aceita resposta vazia
         const text = await response.text();
 
-        if (!text) {
-            return null;
-        }
-
-        try {
-            return JSON.parse(text);
-        } catch (err) {
-            console.error('[ApiService] Resposta inválida:', text);
-            throw new Error('Resposta JSON inválida');
-        }
+        return text
+            ? JSON.parse(text)
+            : null;
     }
 }
