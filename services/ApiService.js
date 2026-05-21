@@ -6,7 +6,9 @@ import { CONFIG } from '../config.js';
 import { SessionManager } from './SessionManager.js';
 
 export class ApiService {
+
     static async request(endpoint, payload = null, method = 'POST') {
+
         const headers = {
             'Content-Type': 'application/json',
             'access-token': SessionManager.getToken(),
@@ -18,12 +20,28 @@ export class ApiService {
             options.body = JSON.stringify(payload);
         }
 
-        const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`, options);
+        const response = await fetch(
+            `${CONFIG.API_BASE_URL}${endpoint}`,
+            options
+        );
 
         if (!response.ok) {
-            throw new Error(`[ApiService] ${method} ${endpoint} → HTTP ${response.status}`);
+            throw new Error(
+                `[ApiService] ${method} ${endpoint} → HTTP ${response.status}`
+            );
         }
 
-        return response.json();
+        const text = await response.text();
+
+        if (!text) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(text);
+        } catch (err) {
+            console.error('[ApiService] Resposta inválida:', text);
+            throw new Error('Resposta JSON inválida');
+        }
     }
 }
