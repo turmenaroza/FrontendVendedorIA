@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +10,7 @@
   <link rel="shortcut icon" href="hexagon-solid-rotated.png" type="image/x-icon">
 
 </head>
+
 <body>
 
   <div class="login-wrap">
@@ -47,22 +49,12 @@
 
         <div class="field">
           <label for="email">E-mail</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="seu@email.com"
-            autocomplete="email"
-          />
+          <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" />
         </div>
 
         <div class="field">
           <label for="password">Senha</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="••••••••"
-            autocomplete="current-password"
-          />
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
         </div>
 
         <button class="btn btn-primary" id="btn-login">
@@ -80,12 +72,13 @@
   </div>
 
   <script>
-    const API_URL = 'https://vendedor-ia-backend.ixbtpi.easypanel.host/api';
+    const API_URL = 'http://localhost:8000/api';
 
-    const emailInput    = document.getElementById('email');
+
+    const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const btnLogin      = document.getElementById('btn-login');
-    const alertBox      = document.getElementById('alert-box');
+    const btnLogin = document.getElementById('btn-login');
+    const alertBox = document.getElementById('alert-box');
 
 
     function showAlert(message, type = 'error') {
@@ -101,14 +94,14 @@
     }
 
     function setLoading(state) {
-      btnLogin.disabled   = state;
+      btnLogin.disabled = state;
       btnLogin.textContent = state ? 'Autenticando...' : 'Entrar no Painel';
     }
 
     async function handleLogin() {
       clearAlert();
 
-      const email    = emailInput.value.trim();
+      const email = emailInput.value.trim();
       const password = passwordInput.value;
 
       if (!email || !password) {
@@ -164,4 +157,5 @@
   </script>
 
 </body>
+
 </html>

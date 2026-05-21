@@ -8,14 +8,9 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.6/sweetalert2.all.min.js"></script>
-
-  <link rel="shortcut icon" href="hexagon-solid-rotated.png" type="image/x-icon">
+  <link rel="shortcut icon" href="hexagon-solid-rotated.png" type="image/x-icon" />
 
   <style>
-    /* ==========================================================================
-       COMPONENTS STYLES
-       ========================================================================== */
-
     /* ── Utilities ── */
     .flex-center {
       display: flex;
@@ -130,10 +125,9 @@
 
     /* ── System Prompt Editor ── */
     .prompt-card {
-      transition: all 0.3s ease;
+      transition: all .3s ease;
     }
 
-    /* ── Toolbar ── */
     .editor-toolbar {
       display: none;
       padding: 10px 16px;
@@ -204,7 +198,7 @@
       color: var(--text);
     }
 
-    /* ── Markdown Preview ── */
+    /* ── Prompt Preview ── */
     .prompt-view-container {
       padding: 0;
     }
@@ -227,7 +221,6 @@
       display: none;
     }
 
-    /* ── Markdown Typography ── */
     .prompt-preview h1,
     .prompt-preview h2,
     .prompt-preview h3 {
@@ -321,7 +314,7 @@
       margin: 6px 0;
     }
 
-    /* ── Textarea ── */
+    /* ── Textarea / Editor ── */
     .prompt-editor-input {
       display: none;
       width: 100%;
@@ -346,7 +339,7 @@
       display: block;
     }
 
-    /* ── Form Inputs ── */
+    /* ── Inputs ── */
     .input-control {
       background: var(--bg);
       border: 1px solid var(--border);
@@ -375,6 +368,15 @@
       background: var(--bg-input, #1a1a1a);
       border-radius: 6px;
       font-size: 14px;
+    }
+
+    .input-time {
+      width: 120px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 12px;
+      letter-spacing: .04em;
     }
 
     .unit-label {
@@ -450,7 +452,7 @@
       color: var(--error);
     }
 
-    /* ── Editor State Buttons ── */
+    /* ── Prompt edit-state button visibility ── */
     .btn-save-prompt,
     .btn-cancel-prompt {
       display: none;
@@ -465,7 +467,7 @@
       display: none;
     }
 
-    /* ── Notifications & Loaders ── */
+    /* ── Toast ── */
     .toast-notification {
       position: fixed;
       bottom: 32px;
@@ -492,6 +494,7 @@
       transform: translateY(0);
     }
 
+    /* ── Loader ── */
     .loader-container {
       padding: 32px 24px;
       color: var(--text-dim);
@@ -619,14 +622,92 @@
       border-color: var(--orange);
       color: var(--orange);
     }
+
+    [class*="status-badge"] {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-cond);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      background: var(--bg);
+    }
+
+    [class*="status-badge"].loaded {
+      border-color: rgba(72, 187, 120, .3);
+      color: var(--success, #48bb78);
+      background: rgba(72, 187, 120, .06);
+    }
+
+    [class*="status-dot"] {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .fm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .fm-field {
+      padding: 20px 24px;
+    }
+
+    .fm-field:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .fm-field-label {
+      font-family: var(--font-cond);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .fm-field-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .fm-message-section {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .fm-save-row {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .fm-time-hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      font-family: var(--font-cond);
+      letter-spacing: .04em;
+    }
   </style>
 </head>
 
-<body style="display:flex; flex-direction:column; min-height:100vh;">
+<body style="display:flex;flex-direction:column;min-height:100vh;">
 
-  <!-- ==========================================================================
-       HEADER COMPONENT
-       ========================================================================== -->
+  <!-- HEADER -->
   <header class="panel-header">
     <a href="#" class="logo">
       <div class="logo-mark"></div>
@@ -646,12 +727,9 @@
     </div>
   </header>
 
-  <!-- ==========================================================================
-       MAIN CONTENT
-       ========================================================================== -->
+  <!-- MAIN -->
   <main class="panel-body anim-fade-up">
 
-    <!-- Header Section -->
     <section class="panel-top flex-between">
       <div>
         <p class="panel-top-label">Visão Geral</p>
@@ -662,7 +740,7 @@
 
     <p class="section-title">Configuração do Agente</p>
 
-    <!-- DATA MANAGEMENT CARD -->
+    <!-- ── DATA MANAGEMENT ─────────────────────────────────────────────────── -->
     <article class="action-card">
       <header class="action-card-header flex-between">
         <div class="action-card-title flex-center gap-sm">
@@ -696,7 +774,7 @@
       </div>
     </article>
 
-    <!-- BUSINESS HOUR MANAGEMENT TABLE -->
+    <!-- ── BUSINESS HOURS ──────────────────────────────────────────────────── -->
     <article class="action-card">
       <header class="action-card-header flex-between">
         <div class="action-card-title flex-center gap-sm">
@@ -707,14 +785,18 @@
           </svg>
           Horário de Funcionamento
         </div>
+        <div class="bh-status-badge" id="bh-status-badge">
+          <span class="bh-status-dot"></span>
+          <span id="bh-status-text">Carregando...</span>
+        </div>
       </header>
-      <div class="action-card-body" style="border-bottom: 1px solid var(--border);">
+      <div class="action-card-body" style="border-bottom:1px solid var(--border);">
         <p class="action-card-desc">
           Define os horários em que o agente de IA irá funcionar e irá fazer prospecção <strong>ATIVA</strong>. Dias
           marcados como fechado ficam inativos.
         </p>
       </div>
-      <div class="action-card-body flex-between" style="flex-direction: column; align-items: stretch; gap: 12px;">
+      <div class="action-card-body flex-between" style="flex-direction:column;align-items:stretch;gap:12px;">
         <table class="bh-table" id="bh-table">
           <thead>
             <tr>
@@ -726,14 +808,14 @@
           </thead>
           <tbody id="bh-tbody"></tbody>
         </table>
-        <div style="display:flex; justify-content:flex-end;">
+        <div style="display:flex;justify-content:flex-end;">
           <button class="btn-action btn-primary" id="btn-save-business-hours" style="width:fit-content;">✓
             Salvar</button>
         </div>
       </div>
     </article>
 
-    <!-- FOLLOW-UP CONFIGURATION CARD -->
+    <!-- ── FOLLOW-UP ───────────────────────────────────────────────────────── -->
     <article class="action-card">
       <header class="action-card-header flex-between">
         <div class="action-card-title flex-center gap-sm">
@@ -744,74 +826,111 @@
           </svg>
           Follow-up
         </div>
+        <div class="fu-status-badge" id="fu-status-badge">
+          <span class="fu-status-dot"></span>
+          <span id="fu-status-text">Carregando...</span>
+        </div>
       </header>
-
-      <!-- 2x2 grid of numeric fields -->
       <div class="followup-grid">
-
-        <!-- Intervalo -->
         <div class="followup-field">
           <p class="followup-field-label">Intervalo de execução</p>
-          <p class="followup-field-desc">
-            Tempo (em minutos) entre cada execução do <strong>smartFollowUp</strong>. O novo valor entra em vigor no
-            próximo ciclo.
-          </p>
+          <p class="followup-field-desc">Tempo (em minutos) entre cada execução do <strong>smartFollowUp</strong>. O
+            novo valor entra em vigor no próximo ciclo.</p>
           <div class="followup-field-input">
             <input type="number" id="followup-interval" class="input-control input-interval" min="1"
               placeholder="ex: 30" />
             <span class="unit-label">MIN</span>
           </div>
         </div>
-
-        <!-- Limite de follow-ups -->
         <div class="followup-field">
           <p class="followup-field-label">Limite de follow-ups</p>
-          <p class="followup-field-desc">
-            Quantidade máxima de mensagens enviadas por contato antes de <strong>pausar</strong> a prospecção daquele
-            número.
+          <p class="followup-field-desc">Quantidade máxima de mensagens enviadas por contato antes de
+            <strong>pausar</strong> a prospecção.
           </p>
           <div class="followup-field-input">
             <input type="number" id="followup-limit" class="input-control input-interval" min="1" placeholder="ex: 5" />
             <span class="unit-label">MSG</span>
           </div>
         </div>
-
-        <!-- Reset do contador -->
-        <div class="followup-field" style="border-bottom: none;">
+        <div class="followup-field" style="border-bottom:none;">
           <p class="followup-field-label">Reset do contador</p>
-          <p class="followup-field-desc">
-            Após quantos <strong>dias</strong> o contador de follow-up é resetado, permitindo retomar a prospecção do
-            contato.
-          </p>
+          <p class="followup-field-desc">Após quantos <strong>dias</strong> o contador de follow-up é resetado,
+            permitindo retomar a prospecção do contato.</p>
           <div class="followup-field-input">
             <input type="number" id="followup-days-reset" class="input-control input-interval" min="1"
               placeholder="ex: 30" />
             <span class="unit-label">DIAS</span>
           </div>
         </div>
-
-        <!-- Placeholder para manter grid simétrico, pode ser usado futuramente -->
-        <div class="followup-field" style="border-bottom: none;">
-        </div>
-
+        <div class="followup-field" style="border-bottom:none;"></div>
       </div>
-
-      <!-- Primeira mensagem (full-width) -->
-      <div class="followup-first-message-section">
-        <p class="followup-field-label">Primeira abordagem</p>
-        <p class="followup-field-desc" style="margin-bottom: 12px;">
-          Texto enviado ao cliente na <strong>PRIMEIRA ABORDAGEM</strong> do smartFollowUp.
-        </p>
-        <textarea id="followup-first-message" rows="4" class="input-control input-textarea"></textarea>
-      </div>
-
-      <!-- Single save button -->
       <div class="followup-save-row">
         <button class="btn-action btn-primary" id="btn-save-followup">✓ Salvar Configurações</button>
       </div>
     </article>
 
-    <!-- SYSTEM PROMPT CARD -->
+    <!-- ── FIRST MESSAGE ───────────────────────────────────────────────────── -->
+    <article class="action-card">
+      <header class="action-card-header flex-between">
+        <div class="action-card-title flex-center gap-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+          Primeira Mensagem Automática
+        </div>
+        <div class="fm-status-badge" id="fm-status-badge">
+          <span class="fm-status-dot"></span>
+          <span id="fm-status-text">Carregando...</span>
+        </div>
+      </header>
+      <div class="action-card-body" style="border-bottom:1px solid var(--border);">
+        <p class="action-card-desc">
+          Configura o disparo <strong>automático e agendado</strong> da primeira mensagem para contatos pendentes. O
+          agente enviará o texto abaixo exatamente no horário definido, todos os dias.
+        </p>
+      </div>
+      <div class="fm-grid">
+        <div class="fm-field">
+          <p class="fm-field-label">Horário de disparo</p>
+          <p class="fm-field-desc">Horário (<strong>HH:MM:SS</strong>) em que o agente enviará a primeira mensagem para
+            todos os contatos pendentes.</p>
+          <div class="followup-field-input">
+            <input type="text" id="fm-execution-time" class="input-control input-time" placeholder="ex: 09:00:00"
+              maxlength="8" />
+            <span class="unit-label">HH:MM:SS</span>
+          </div>
+          <p class="fm-time-hint" id="fm-time-hint"></p>
+        </div>
+        <div class="fm-field" style="display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;color:var(--text-dim);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+              stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px;opacity:.3;">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <p
+              style="font-size:11px;font-family:var(--font-cond);letter-spacing:.06em;text-transform:uppercase;opacity:.4;">
+              Disparo diário</p>
+          </div>
+        </div>
+      </div>
+      <div class="fm-message-section">
+        <p class="fm-field-label">Mensagem</p>
+        <p class="fm-field-desc" style="margin-bottom:12px;">Texto enviado na <strong>PRIMEIRA abordagem</strong> para
+          cada contato pendente no horário configurado acima.</p>
+        <textarea id="fm-message" rows="5" class="input-control input-textarea"
+          placeholder="Olá! Tudo bem? Vi que você demonstrou interesse em nossos serviços..."></textarea>
+      </div>
+      <div class="fm-save-row">
+        <button class="btn-action btn-primary" id="btn-save-first-message">✓ Salvar Configuração</button>
+      </div>
+    </article>
+
+    <!-- ── SYSTEM PROMPT ───────────────────────────────────────────────────── -->
     <article class="action-card prompt-card" id="prompt-card">
       <header class="action-card-header flex-between">
         <div class="action-card-title flex-center gap-sm">
@@ -821,6 +940,10 @@
             <line x1="12" y1="19" x2="20" y2="19" />
           </svg>
           System Prompt
+        </div>
+        <div class="sp-status-badge" id="sp-status-badge">
+          <span class="sp-status-dot"></span>
+          <span id="sp-status-text">Carregando...</span>
         </div>
         <div class="flex-center gap-sm">
           <button class="btn-action btn-cancel btn-cancel-prompt" id="btn-cancel-prompt">✕ Cancelar</button>
@@ -838,96 +961,78 @@
           <option value="h3">Título 3</option>
         </select>
         <div class="toolbar-separator"></div>
-        <button class="toolbar-btn" data-action="bold" title="Negrito (Ctrl+B)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-            stroke-linecap="round" stroke-linejoin="round">
+        <button class="toolbar-btn" data-action="bold" title="Negrito (Ctrl+B)"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
             <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
-          </svg>
-        </button>
-        <button class="toolbar-btn" data-action="italic" title="Itálico (Ctrl+I)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+          </svg></button>
+        <button class="toolbar-btn" data-action="italic" title="Itálico (Ctrl+I)"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
             <line x1="19" y1="4" x2="10" y2="4" />
             <line x1="14" y1="20" x2="5" y2="20" />
             <line x1="15" y1="4" x2="9" y2="20" />
-          </svg>
-        </button>
-        <button class="toolbar-btn" data-action="strike" title="Riscado">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+          </svg></button>
+        <button class="toolbar-btn" data-action="strike" title="Riscado"><svg width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12" />
             <path d="M16 6C16 6 14.5 4 12 4C9.5 4 7 5.5 7 8C7 10.5 9 11.5 12 12" />
             <path d="M8 18C8 18 9.5 20 12 20C14.5 20 17 18.5 17 16C17 13.5 15 12.5 12 12" />
-          </svg>
-        </button>
-        <button class="toolbar-btn" data-action="code" title="Código inline">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+          </svg></button>
+        <button class="toolbar-btn" data-action="code" title="Código inline"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
             <polyline points="16 18 22 12 16 6" />
             <polyline points="8 6 2 12 8 18" />
-          </svg>
-        </button>
+          </svg></button>
         <div class="toolbar-separator"></div>
-        <button class="toolbar-btn" data-action="ul" title="Lista com marcadores">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+        <button class="toolbar-btn" data-action="ul" title="Lista com marcadores"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
             <line x1="9" y1="6" x2="20" y2="6" />
             <line x1="9" y1="12" x2="20" y2="12" />
             <line x1="9" y1="18" x2="20" y2="18" />
             <circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none" />
             <circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none" />
             <circle cx="4" cy="18" r="1.5" fill="currentColor" stroke="none" />
-          </svg>
-        </button>
-        <button class="toolbar-btn" data-action="ol" title="Lista numerada">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+          </svg></button>
+        <button class="toolbar-btn" data-action="ol" title="Lista numerada"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
             <line x1="10" y1="6" x2="21" y2="6" />
             <line x1="10" y1="12" x2="21" y2="12" />
             <line x1="10" y1="18" x2="21" y2="18" />
             <path d="M4 6h1v4" stroke-width="2" />
             <path d="M4 10h2" stroke-width="2" />
             <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1" stroke-width="2" />
-          </svg>
-        </button>
-        <button class="toolbar-btn" data-action="codeblock" title="Bloco de código">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+          </svg></button>
+        <button class="toolbar-btn" data-action="codeblock" title="Bloco de código"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <path d="M9 9l-3 3 3 3" />
             <path d="M15 9l3 3-3 3" />
-          </svg>
-        </button>
-        <button class="toolbar-btn" data-action="quote" title="Citação">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round" stroke-linejoin="round">
+          </svg></button>
+        <button class="toolbar-btn" data-action="quote" title="Citação"><svg width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path
               d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
             <path
               d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
-          </svg>
-        </button>
+          </svg></button>
         <div class="toolbar-separator"></div>
-        <button class="toolbar-btn" data-action="hr" title="Linha divisória">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round">
+        <button class="toolbar-btn" data-action="hr" title="Linha divisória"><svg width="14" height="14"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
             <line x1="3" y1="12" x2="21" y2="12" />
-          </svg>
-        </button>
+          </svg></button>
       </div>
 
       <div class="prompt-view-container">
-        <!-- Loader -->
         <div class="loader-container flex-center" id="prompt-loader">
-          <div class="spinner-icon"></div>
-          Carregando system prompt...
+          <div class="spinner-icon"></div>&nbsp;Carregando system prompt...
         </div>
-
-        <!-- Preview -->
         <div class="prompt-preview is-empty" id="prompt-preview" style="display:none;"></div>
-
-        <!-- Editor -->
         <textarea class="prompt-editor-input" id="prompt-editor"
           placeholder="Digite aqui o system prompt em markdown...&#10;&#10;Suporte a **negrito**, _itálico_, # títulos, listas, `código` e mais."></textarea>
       </div>
@@ -937,602 +1042,8 @@
 
   <div class="toast-notification" id="toast-notification"></div>
 
-  <!-- ==========================================================================
-       APPLICATION LOGIC
-       ========================================================================== -->
-  <script>
-    /**
-     * CONFIGURATION
-     */
-    const CONFIG = {
-      API_BASE_URL: 'https://vendedor-ia-backend.ixbtpi.easypanel.host',
-      ENDPOINTS: {
-        PROMPT_LOAD: '/api/prompt/load',
-        PROMPT_SAVE: '/api/prompt',
-        CLEAR_MESSAGES: '/api/messages/clear',
-        CONFIG_LOAD: '/api/config/load',
-        CONFIG_SAVE: '/api/config/follow-up',
-        BH_UPDATE: '/api/businessHour/',
-        BH_GETALL: '/api/loadBusinessHour/',
-      },
-      KEYS: {
-        FOLLOWUP: 'smart_followup_interval',
-        TOKEN: 'kj_token',
-        EMAIL: 'kj_email',
-      }
-    };
-
-    /**
-     * AUTHENTICATION & USER SESSION
-     */
-    const SessionManager = {
-      getToken() { return sessionStorage.getItem(CONFIG.KEYS.TOKEN); },
-      getEmail() { return sessionStorage.getItem(CONFIG.KEYS.EMAIL); },
-
-      checkAuth() {
-        if (!this.getToken() || !this.getEmail()) {
-          window.location.href = 'index.html';
-          return false;
-        }
-        return true;
-      },
-
-      logout() {
-        sessionStorage.removeItem(CONFIG.KEYS.TOKEN);
-        sessionStorage.removeItem(CONFIG.KEYS.EMAIL);
-        window.location.href = 'index.html';
-      },
-
-      renderUserInfo() {
-        const email = this.getEmail();
-        if (email) {
-          document.getElementById('user-avatar').textContent = email.split('@')[0].slice(0, 2).toUpperCase();
-          document.getElementById('user-email').textContent = email;
-        }
-      }
-    };
-
-    /**
-     * API SERVICE
-     */
-    class ApiService {
-      static async request(endpoint, payload = null, method = 'POST') {
-        const headers = {
-          'Content-Type': 'application/json',
-          'access-token': SessionManager.getToken(),
-        };
-        const options = { method, headers };
-        if (payload !== null && payload !== undefined && method !== 'GET') {
-          options.body = JSON.stringify(payload);
-        }
-        const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`, options);
-        if (!response.ok) throw new Error(`API Request failed: ${response.status}`);
-
-        const contentLength = response.headers.get('content-length');
-        const contentType = response.headers.get('content-type');
-
-        if (contentLength === '0' || !contentType?.includes('application/json')) {
-          return null;
-        }
-
-        return response.json();
-      }
-    }
-
-    /**
-     * UI COMPONENTS
-     */
-    const UI = {
-      toast: document.getElementById('toast-notification'),
-
-      showToast(message, type = 'success') {
-        this.toast.textContent = message;
-        const isError = type === 'error';
-        this.toast.style.borderLeftColor = isError ? 'var(--error)' : 'var(--success)';
-        this.toast.style.color = isError ? 'var(--error)' : 'var(--success)';
-        this.toast.classList.add('is-visible');
-        setTimeout(() => this.toast.classList.remove('is-visible'), 3500);
-      },
-
-      setLoadingState(buttonElement, isLoading, originalText = '') {
-        if (isLoading) {
-          buttonElement.dataset.originalText = buttonElement.innerHTML;
-          buttonElement.disabled = true;
-          buttonElement.textContent = 'Aguarde...';
-        } else {
-          buttonElement.disabled = false;
-          buttonElement.innerHTML = originalText || buttonElement.dataset.originalText;
-        }
-      },
-
-      renderDate() {
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('pt-BR', {
-          weekday: 'long', day: '2-digit', month: 'long', year: 'numeric',
-        });
-      }
-    };
-
-    /**
-     * SYSTEM PROMPT MODULE
-     */
-    const PromptModule = {
-      savedContent: '',
-      elements: {
-        card: document.getElementById('prompt-card'),
-        preview: document.getElementById('prompt-preview'),
-        loader: document.getElementById('prompt-loader'),
-        editor: document.getElementById('prompt-editor'),
-        btnEdit: document.getElementById('btn-edit-prompt'),
-        btnSave: document.getElementById('btn-save-prompt'),
-        btnCancel: document.getElementById('btn-cancel-prompt'),
-      },
-
-      async load() {
-        this.toggleLoader(true);
-        try {
-          const data = await ApiService.request(CONFIG.ENDPOINTS.PROMPT_LOAD, { id: 'system' });
-          this.savedContent = data.systemPrompt?.text || '';
-          this.renderPreview(this.savedContent);
-        } catch {
-          this.savedContent = '';
-          this.renderPreview('');
-        }
-      },
-
-      async save() {
-        const newContent = this.elements.editor.value.trim();
-        UI.setLoadingState(this.elements.btnSave, true);
-        try {
-          await ApiService.request(CONFIG.ENDPOINTS.PROMPT_SAVE, { systemPrompt: newContent });
-          this.savedContent = newContent;
-          this.renderPreview(this.savedContent);
-          this.setEditMode(false);
-          UI.showToast('✓ System prompt salvo com sucesso.');
-          await this.load();
-        } catch {
-          UI.showToast('✕ Erro ao salvar. Tente novamente.', 'error');
-        } finally {
-          UI.setLoadingState(this.elements.btnSave, false, '✓ Salvar');
-        }
-      },
-
-      renderPreview(text) {
-        this.toggleLoader(false);
-        if (text) {
-          this.elements.preview.innerHTML = marked.parse(text);
-          this.elements.preview.classList.remove('is-empty');
-        } else {
-          this.elements.preview.textContent = 'Nenhum system prompt definido. Clique em "Editar" para adicionar.';
-          this.elements.preview.classList.add('is-empty');
-        }
-      },
-
-      setEditMode(isEditing) {
-        if (isEditing) {
-          this.elements.editor.value = this.savedContent;
-          this.elements.card.classList.add('is-editing');
-          this.elements.editor.focus();
-        } else {
-          this.elements.card.classList.remove('is-editing');
-        }
-      },
-
-      toggleLoader(show) {
-        this.elements.loader.style.display = show ? 'flex' : 'none';
-        this.elements.preview.style.display = show ? 'none' : 'block';
-      },
-
-      init() {
-        this.elements.btnEdit.addEventListener('click', () => this.setEditMode(true));
-        this.elements.btnCancel.addEventListener('click', () => this.setEditMode(false));
-        this.elements.btnSave.addEventListener('click', () => this.save());
-
-        this.elements.editor.addEventListener('keydown', (e) => {
-          if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-            e.preventDefault();
-            this.save();
-          }
-        });
-      }
-    };
-
-    /**
-     * FOLLOW-UP MODULE
-     */
-    const FollowUpModule = {
-      elements: {
-        intervalInput: document.getElementById('followup-interval'),
-        firstMessageInput: document.getElementById('followup-first-message'),
-        limitInput: document.getElementById('followup-limit'),
-        daysResetInput: document.getElementById('followup-days-reset'),
-        btnSave: document.getElementById('btn-save-followup'),
-      },
-
-      async load() {
-        try {
-          const data = await ApiService.request(CONFIG.ENDPOINTS.CONFIG_LOAD, { key: CONFIG.KEYS.FOLLOWUP });
-          const config = data.followUpConfig;
-
-          if (!config) return;
-
-          this.elements.intervalInput.value = Math.round(parseInt(config.interval, 10) / 60000);
-          this.elements.limitInput.value = config.followUpLimit;
-          this.elements.daysResetInput.value = config.daysToResetCounter;
-          this.elements.firstMessageInput.value = config.firstMessageText || '';
-        } catch (error) {
-          console.error('Failed to load Follow-up config', error);
-        }
-      },
-
-      validate() {
-        const minutes = parseInt(this.elements.intervalInput.value, 10);
-        const limit = parseInt(this.elements.limitInput.value, 10);
-        const days = parseInt(this.elements.daysResetInput.value, 10);
-        const text = this.elements.firstMessageInput.value.trim();
-
-        if (!minutes || minutes < 1) {
-          UI.showToast('✕ Informe um intervalo válido (mínimo 1 minuto).', 'error');
-          return false;
-        }
-        if (!limit || limit < 1) {
-          UI.showToast('✕ Informe um limite de follow-ups válido (mínimo 1).', 'error');
-          return false;
-        }
-        if (!days || days < 1) {
-          UI.showToast('✕ Informe um número de dias para reset válido (mínimo 1).', 'error');
-          return false;
-        }
-        if (!text) {
-          UI.showToast('✕ Informe o texto da primeira mensagem.', 'error');
-          return false;
-        }
-        return true;
-      },
-
-      buildPayload() {
-        return {
-          key: CONFIG.KEYS.FOLLOWUP,
-          interval: String(parseInt(this.elements.intervalInput.value, 10) * 60000),
-          firstMessageText: this.elements.firstMessageInput.value.trim(),
-          followUpLimit: parseInt(this.elements.limitInput.value, 10),
-          daysToResetCounter: parseInt(this.elements.daysResetInput.value, 10),
-        };
-      },
-
-      async save() {
-        if (!this.validate()) return;
-
-        UI.setLoadingState(this.elements.btnSave, true);
-        try {
-          await ApiService.request(CONFIG.ENDPOINTS.CONFIG_SAVE, this.buildPayload());
-          UI.showToast('✓ Configurações de follow-up salvas com sucesso.');
-        } catch {
-          UI.showToast('✕ Erro ao salvar configurações.', 'error');
-        } finally {
-          UI.setLoadingState(this.elements.btnSave, false, '✓ Salvar Configurações');
-        }
-      },
-
-      init() {
-        this.elements.btnSave.addEventListener('click', () => this.save());
-      }
-    };
-
-    /**
-     * DATA MANAGEMENT MODULE
-     */
-    const DataManagerModule = {
-      init() {
-        const btnClear = document.getElementById('btn-clear-messages');
-
-        btnClear.addEventListener('click', async () => {
-          const { isConfirmed } = await Swal.fire({
-            title: 'Limpar histórico de mensagens?',
-            html: `
-              <p style="margin: 0 0 10px; line-height: 1.65;">
-                Esta ação irá apagar <strong>permanentemente</strong> todo o histórico de conversas armazenado pelo agente.
-              </p>
-              <p style="margin: 0; line-height: 1.65;">
-                O agente perderá o contexto de todas as interações anteriores. Esta operação <strong>não pode ser desfeita</strong>.
-              </p>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sim, limpar tudo',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#e53e3e',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true,
-            focusCancel: true,
-          });
-
-          if (!isConfirmed) return;
-
-          UI.setLoadingState(btnClear, true);
-
-          try {
-            await ApiService.request(CONFIG.ENDPOINTS.CLEAR_MESSAGES);
-            Swal.fire({
-              title: 'Histórico limpo!',
-              text: 'Todas as mensagens foram removidas com sucesso.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-              confirmButtonColor: '#e8781a',
-              timer: 3000,
-              timerProgressBar: true,
-            });
-            UI.showToast('✓ Histórico de mensagens limpo com sucesso.');
-          } catch {
-            Swal.fire({
-              title: 'Erro ao limpar',
-              text: 'Não foi possível limpar as mensagens. Tente novamente.',
-              icon: 'error',
-              confirmButtonText: 'Fechar',
-              confirmButtonColor: '#e8781a',
-            });
-            UI.showToast('✕ Erro ao limpar mensagens.', 'error');
-          } finally {
-            const originalIcon = `
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6"/><path d="M14 11v6"/>
-                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-              </svg>
-              Limpar Mensagens`;
-            UI.setLoadingState(btnClear, false, originalIcon);
-          }
-        });
-      }
-    };
-
-    /**
-     * MARKDOWN TOOLBAR MODULE
-     */
-    const MarkdownToolbar = {
-      editor: document.getElementById('prompt-editor'),
-
-      getSelection() {
-        return {
-          start: this.editor.selectionStart,
-          end: this.editor.selectionEnd,
-          text: this.editor.value.slice(this.editor.selectionStart, this.editor.selectionEnd),
-          value: this.editor.value
-        };
-      },
-
-      applySelection(newValue, newStart, newEnd) {
-        this.editor.value = newValue;
-        this.editor.setSelectionRange(newStart, newEnd);
-        this.editor.focus();
-      },
-
-      wrapInline(marker, placeholder) {
-        const { start, end, text, value } = this.getSelection();
-        const before = value.slice(start - marker.length, start);
-        const after = value.slice(end, end + marker.length);
-
-        if (before === marker && after === marker) {
-          const nv = value.slice(0, start - marker.length) + text + value.slice(end + marker.length);
-          this.applySelection(nv, start - marker.length, end - marker.length);
-        } else {
-          const content = text || placeholder;
-          const nv = value.slice(0, start) + marker + content + marker + value.slice(end);
-          this.applySelection(nv, start + marker.length, start + marker.length + content.length);
-        }
-      },
-
-      prefixLines(prefix, placeholder) {
-        const { start, end, value } = this.getSelection();
-        const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-        const lineEnd = value.indexOf('\n', end);
-        const block = value.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
-        const newBlock = block.split('\n').map(l => prefix + (l || placeholder)).join('\n');
-        const nv = value.slice(0, lineStart) + newBlock + (lineEnd === -1 ? '' : value.slice(lineEnd));
-        this.applySelection(nv, lineStart, lineStart + newBlock.length);
-      },
-
-      insertCodeblock() {
-        const { start, end, text, value } = this.getSelection();
-        const content = text || 'código aqui';
-        const insert = '```\n' + content + '\n```';
-        const nv = value.slice(0, start) + insert + value.slice(end);
-        this.applySelection(nv, start + 4, start + 4 + content.length);
-      },
-
-      insertHorizontalRule() {
-        const { start, value } = this.getSelection();
-        const insert = '\n---\n';
-        const nv = value.slice(0, start) + insert + value.slice(start);
-        this.applySelection(nv, start + insert.length, start + insert.length);
-      },
-
-      init() {
-        document.querySelectorAll('.toolbar-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            switch (btn.dataset.action) {
-              case 'bold': this.wrapInline('**', 'negrito'); break;
-              case 'italic': this.wrapInline('_', 'itálico'); break;
-              case 'strike': this.wrapInline('~~', 'riscado'); break;
-              case 'code': this.wrapInline('`', 'código'); break;
-              case 'ul': this.prefixLines('- ', 'item'); break;
-              case 'ol': this.prefixLines('1. ', 'item'); break;
-              case 'quote': this.prefixLines('> ', 'citação'); break;
-              case 'codeblock': this.insertCodeblock(); break;
-              case 'hr': this.insertHorizontalRule(); break;
-            }
-          });
-        });
-
-        document.getElementById('toolbar-heading').addEventListener('change', function () {
-          const map = { h1: '# ', h2: '## ', h3: '### ' };
-          if (map[this.value]) MarkdownToolbar.prefixLines(map[this.value], 'título');
-          this.value = '';
-        });
-
-        this.editor.addEventListener('keydown', (e) => {
-          if (e.ctrlKey || e.metaKey) {
-            if (e.key === 'b') { e.preventDefault(); this.wrapInline('**', 'negrito'); }
-            if (e.key === 'i') { e.preventDefault(); this.wrapInline('_', 'itálico'); }
-          }
-        });
-      }
-    };
-
-    /**
-     * BUSINESS HOURS MODULE
-     */
-    const BusinessHourModule = {
-      days: [
-        { key: 'Segunda', label: 'Segunda-feira', closed: false, start: '08:00', end: '18:00' },
-        { key: 'Terca', label: 'Terça-feira', closed: false, start: '08:00', end: '18:00' },
-        { key: 'Quarta', label: 'Quarta-feira', closed: false, start: '08:00', end: '18:00' },
-        { key: 'Quinta', label: 'Quinta-feira', closed: false, start: '08:00', end: '18:00' },
-        { key: 'Sexta', label: 'Sexta-feira', closed: false, start: '08:00', end: '18:00' },
-        { key: 'Sabado', label: 'Sábado', closed: true, start: '', end: '' },
-        { key: 'Domingo', label: 'Domingo', closed: true, start: '', end: '' },
-      ],
-
-      timeToMin(t) {
-        if (!t) return null;
-        const [h, m] = t.split(':').map(Number);
-        return h * 60 + m;
-      },
-
-      validateRow(day) {
-        const startEl = document.getElementById('bh-start-' + day.key);
-        const endEl = document.getElementById('bh-end-' + day.key);
-        const errEl = document.getElementById('bh-err-' + day.key);
-        if (day.closed) return true;
-
-        const timeRe = /^([01]\d|2[0-3]):[0-5]\d$/;
-        let msg = '';
-        if (!timeRe.test(startEl.value)) msg = 'Formato inválido (HH:MM)';
-        else if (!timeRe.test(endEl.value)) msg = 'Formato inválido (HH:MM)';
-        else if (this.timeToMin(endEl.value) <= this.timeToMin(startEl.value)) msg = 'Fim deve ser maior que início';
-
-        startEl.classList.toggle('error', !!msg);
-        endEl.classList.toggle('error', !!msg);
-        errEl.textContent = msg;
-        errEl.classList.toggle('visible', !!msg);
-        return !msg;
-      },
-
-      render() {
-        const tbody = document.getElementById('bh-tbody');
-        tbody.innerHTML = '';
-        this.days.forEach(day => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>
-              <span class="bh-day-label">${day.label}</span>
-              ${day.closed ? '<span class="bh-closed-badge">Fechado</span>' : ''}
-            </td>
-            <td>
-              ${day.closed
-              ? '<span style="color:var(--text-dim);font-size:13px;">—</span>'
-              : `<div>
-                     <input class="bh-time-input input-control" id="bh-start-${day.key}" value="${day.start}" placeholder="08:00" maxlength="5">
-                     <div class="bh-err-msg" id="bh-err-${day.key}"></div>
-                   </div>`}
-            </td>
-            <td>
-              ${day.closed
-              ? '<span style="color:var(--text-dim);font-size:13px;">—</span>'
-              : `<input class="bh-time-input input-control" id="bh-end-${day.key}" value="${day.end}" placeholder="18:00" maxlength="5">`}
-            </td>
-            <td>
-              <button class="bh-toggle-btn" data-key="${day.key}">
-                ${day.closed ? 'Abrir' : 'Fechar'}
-              </button>
-            </td>`;
-          tbody.appendChild(tr);
-
-          if (!day.closed) {
-            document.getElementById('bh-start-' + day.key).addEventListener('blur', e => { day.start = e.target.value; this.validateRow(day); });
-            document.getElementById('bh-end-' + day.key).addEventListener('blur', e => { day.end = e.target.value; this.validateRow(day); });
-          }
-        });
-
-        tbody.querySelectorAll('.bh-toggle-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const d = this.days.find(x => x.key === btn.dataset.key);
-            d.closed = !d.closed;
-            if (d.closed) { d.start = ''; d.end = ''; }
-            this.render();
-          });
-        });
-      },
-
-      async load() {
-        try {
-          const data = await ApiService.request(CONFIG.ENDPOINTS.BH_GETALL, undefined, 'GET');
-          const list = data?.businessHour ?? [];
-          const byDay = Object.fromEntries(list.map(bh => [bh.dia, bh]));
-
-          this.days.forEach(day => {
-            const bh = byDay[day.key];
-            if (!bh) return;
-            day.closed = !bh.hora_inicio;
-            day.start = bh.hora_inicio ? bh.hora_inicio.slice(0, 5) : '';
-            day.end = bh.hora_fim ? bh.hora_fim.slice(0, 5) : '';
-          });
-        } catch (e) {
-          console.error('Erro ao carregar horários', e);
-        }
-        this.render();
-      },
-
-      async save() {
-        const allValid = this.days.every(d => this.validateRow(d));
-        if (!allValid) return UI.showToast('✕ Corrija os erros antes de salvar.', 'error');
-
-        const btn = document.getElementById('btn-save-business-hours');
-        UI.setLoadingState(btn, true);
-
-        try {
-          await Promise.all(
-            this.days.map(d =>
-              ApiService.request(CONFIG.ENDPOINTS.BH_UPDATE + d.key, {
-                hora_inicio: d.closed ? null : d.start + ':00',
-                hora_fim: d.closed ? null : d.end + ':00',
-              }, 'PUT')
-            )
-          );
-          UI.showToast('✓ Horários salvos com sucesso.');
-        } catch {
-          UI.showToast('✕ Erro ao salvar horários.', 'error');
-        } finally {
-          UI.setLoadingState(btn, false, '✓ Salvar');
-        }
-      },
-
-      init() {
-        document.getElementById('btn-save-business-hours').addEventListener('click', () => this.save());
-        this.load();
-      }
-    };
-
-    /**
-     * APP BOOTSTRAP
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!SessionManager.checkAuth()) return;
-
-      SessionManager.renderUserInfo();
-      UI.renderDate();
-
-      document.getElementById('btn-logout').addEventListener('click', () => SessionManager.logout());
-
-      PromptModule.init();
-      FollowUpModule.init();
-      DataManagerModule.init();
-      MarkdownToolbar.init();
-      BusinessHourModule.init();
-
-      PromptModule.load();
-      FollowUpModule.load();
-    });
-  </script>
+  <!-- Único ponto de entrada JS — todos os módulos são importados por main.js -->
+  <script type="module" src="main.js"></script>
 
 </body>
 
