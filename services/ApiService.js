@@ -2,6 +2,7 @@
  * services/ApiService.js
  * Camada HTTP única. Todos os módulos importam daqui.
  */
+
 import { CONFIG } from '../config.js';
 import { SessionManager } from './SessionManager.js';
 
@@ -31,6 +32,7 @@ export class ApiService {
             );
         }
 
+        // aceita resposta vazia
         const text = await response.text();
 
         if (!text) {
