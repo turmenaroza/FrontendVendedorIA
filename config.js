@@ -17,6 +17,7 @@ export const CONFIG = {
         BH_GETALL: '/api/loadBusinessHour/',
         FIRST_MSG_SAVE: '/api/config/firstMessage/',
         FIRST_MSG_LOAD: '/api/config/firstMessage/load',
+        FIRST_MSG_SEND: '/api/config/firstMessage/send'
     },
 
     KEYS: {
