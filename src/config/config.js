@@ -1,12 +1,5 @@
-/**
- * config.js
- * Configuração central da aplicação.
- * Altere API_BASE_URL para apontar ao ambiente correto.
- */
-
 export const CONFIG = {
     API_BASE_URL: 'https://vendedor-ia-backend.ixbtpi.easypanel.host',
-
     ENDPOINTS: {
         PROMPT_LOAD: '/api/prompt/load',
         PROMPT_SAVE: '/api/prompt',
@@ -19,7 +12,6 @@ export const CONFIG = {
         FIRST_MSG_LOAD: '/api/config/firstMessage/load',
         FIRST_MSG_SEND: '/api/config/firstMessage/send'
     },
-
     KEYS: {
         FOLLOWUP: 'smart_followup_interval',
         FIRST_MSG: 'first_message_config',

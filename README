@@ -1,0 +1,26 @@
+# 🤖 Vendedor IA — Evolução Compressores
+
+Painel administrativo premium, responsivo e minimalista desenvolvido para gerenciar o agente inteligente de vendas da **Evolução Compressores**.
+
+---
+
+### 🚀 Como Instalar e Rodar o Projeto
+
+Abra o terminal na pasta raiz do projeto e execute os comandos exatamente na ordem abaixo:
+
+1️⃣ **Instalar as dependências do projeto:**
+```bash
+npm install
+
+2️⃣ Instalar e fixar o Tailwind CSS e seus compiladores visuais:
+npm install -D tailwindcss@3 postcss autoprefixer
+
+3️⃣ Inicializar o servidor de desenvolvimento local (Vite):
+npm run dev
+
+Após rodar o último comando, clique no link gerado no terminal (geralmente http://localhost:5173) para abrir o painel no seu navegador.
+
+🔑 Credenciais de Acesso Atualizadas
+E-mail Corporativo: admin@evolucaocompressores.com
+
+Senha de Acesso: admin123
